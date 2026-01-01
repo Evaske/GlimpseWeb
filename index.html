@@ -119,12 +119,6 @@
             .hero-phone {
                 position: absolute;
                 filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.2));
-                transition: transform 0.4s ease;
-            }
-
-            .hero-phone:hover {
-                transform: translateY(-12px) scale(1.02);
-                z-index: 10;
             }
 
             .hero-phone-center {
@@ -141,22 +135,12 @@
                 bottom: 20px;
             }
 
-            .hero-phone-left:hover {
-                transform: translateX(-280px) rotate(-8deg) translateY(-12px)
-                    scale(1.02);
-            }
-
             .hero-phone-right {
                 z-index: 3;
                 width: 200px;
                 right: 50%;
                 transform: translateX(280px) rotate(8deg);
                 bottom: 20px;
-            }
-
-            .hero-phone-right:hover {
-                transform: translateX(280px) rotate(8deg) translateY(-12px)
-                    scale(1.02);
             }
 
             @media (max-width: 767px) {
@@ -167,17 +151,9 @@
                     width: 160px;
                     transform: translateX(-160px) rotate(-8deg);
                 }
-                .hero-phone-left:hover {
-                    transform: translateX(-160px) rotate(-8deg) translateY(-8px)
-                        scale(1.02);
-                }
                 .hero-phone-right {
                     width: 160px;
                     transform: translateX(160px) rotate(8deg);
-                }
-                .hero-phone-right:hover {
-                    transform: translateX(160px) rotate(8deg) translateY(-8px)
-                        scale(1.02);
                 }
             }
 
