@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Glimpse - Micro Journal for iOS</title>
+        <meta
+            name="description"
+            content="Capture your day in 140 characters or less. A calming micro-journal app that helps you build a daily reflection habit."
+        />
+
+        <!-- Favicon -->
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="images/app-logo.png"
+        />
+        <link rel="icon" type="image/png" href="images/app-logo.png" />
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Tailwind CSS via CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            sage: {
+                                50: "#E3EBE6",
+                                400: "#6EAA91",
+                                500: "#7C9188",
+                                600: "#568471",
+                                700: "#436959",
+                                900: "#2F443C",
+                                950: "#2B312B",
+                            },
+                            slate: {
+                                700: "#2E2929",
+                                900: "#262323",
+                            },
+                            moss: {
+                                50: "#E0E9E2",
+                                100: "#DDE7DF",
+                                150: "#D7E2DA",
+                                200: "#D4E0D7",
+                                250: "#D1DED4",
+                                300: "#CBD9CF",
+                                350: "#C8D7CC",
+                                650: "#323A33",
+                                700: "#2E352F",
+                                750: "#2A312B",
+                                800: "#262D27",
+                                850: "#222923",
+                                900: "#1E2520",
+                                950: "#1A211C",
+                            },
+                        },
+                        fontFamily: {
+                            nunito: ["Nunito", "sans-serif"],
+                        },
+                    },
+                },
+            };
+        </script>
+
+        <style>
+            body {
+                font-family: "Nunito", sans-serif;
+            }
+
+            /* Star pattern background */
+            .star-bg {
+                background-color: #e0e9e2;
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15 8l1.5 3 3.5.5-2.5 2.5.5 3.5-3-1.5-3 1.5.5-3.5-2.5-2.5 3.5-.5L15 8zm30 30l1 2 2.5.3-1.8 1.7.4 2.5-2.1-1.1-2.1 1.1.4-2.5-1.8-1.7 2.5-.3 1-2z' fill='%23CBD9CF' fill-opacity='0.6' fill-rule='evenodd'/%3E%3C/svg%3E");
+            }
+
+            .star-bg-light {
+                background-color: #f5f8f6;
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15 8l1.5 3 3.5.5-2.5 2.5.5 3.5-3-1.5-3 1.5.5-3.5-2.5-2.5 3.5-.5L15 8zm30 30l1 2 2.5.3-1.8 1.7.4 2.5-2.1-1.1-2.1 1.1.4-2.5-1.8-1.7 2.5-.3 1-2z' fill='%23DDE7DF' fill-opacity='0.8' fill-rule='evenodd'/%3E%3C/svg%3E");
+            }
+
+            /* Smooth scrolling */
+            html {
+                scroll-behavior: smooth;
+            }
+
+            /* Screenshot styling */
+            .screenshot {
+                filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.15));
+                transition: transform 0.3s ease;
+            }
+
+            .screenshot:hover {
+                transform: translateY(-8px);
+            }
+
+            /* Hero phone display */
+            .hero-phones {
+                position: relative;
+                height: 500px;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+            }
+
+            @media (min-width: 768px) {
+                .hero-phones {
+                    height: 580px;
+                }
+            }
+
+            .hero-phone {
+                position: absolute;
+                filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.2));
+                transition: transform 0.4s ease;
+            }
+
+            .hero-phone:hover {
+                transform: translateY(-12px) scale(1.02);
+                z-index: 10;
+            }
+
+            .hero-phone-center {
+                z-index: 5;
+                width: 240px;
+                bottom: 0;
+            }
+
+            .hero-phone-left {
+                z-index: 3;
+                width: 200px;
+                left: 50%;
+                transform: translateX(-280px) rotate(-8deg);
+                bottom: 20px;
+            }
+
+            .hero-phone-left:hover {
+                transform: translateX(-280px) rotate(-8deg) translateY(-12px)
+                    scale(1.02);
+            }
+
+            .hero-phone-right {
+                z-index: 3;
+                width: 200px;
+                right: 50%;
+                transform: translateX(280px) rotate(8deg);
+                bottom: 20px;
+            }
+
+            .hero-phone-right:hover {
+                transform: translateX(280px) rotate(8deg) translateY(-12px)
+                    scale(1.02);
+            }
+
+            @media (max-width: 767px) {
+                .hero-phone-center {
+                    width: 200px;
+                }
+                .hero-phone-left {
+                    width: 160px;
+                    transform: translateX(-160px) rotate(-8deg);
+                }
+                .hero-phone-left:hover {
+                    transform: translateX(-160px) rotate(-8deg) translateY(-8px)
+                        scale(1.02);
+                }
+                .hero-phone-right {
+                    width: 160px;
+                    transform: translateX(160px) rotate(8deg);
+                }
+                .hero-phone-right:hover {
+                    transform: translateX(160px) rotate(8deg) translateY(-8px)
+                        scale(1.02);
+                }
+            }
+
+            /* Feature card hover */
+            .feature-card {
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 40px rgba(47, 68, 60, 0.12);
+            }
+
+            /* Gradient overlay for hero */
+            .hero-gradient {
+                background: linear-gradient(180deg, #e0e9e2 0%, #f5f8f6 100%);
+            }
+
+            /* App Store button hover */
+            .app-store-btn {
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+            }
+
+            .app-store-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 30px rgba(47, 68, 60, 0.2);
+            }
+
+            /* Decorative corner shapes */
+            .corner-shape {
+                position: absolute;
+                width: 200px;
+                height: 200px;
+                background: linear-gradient(135deg, #2f443c 0%, #436959 100%);
+                border-radius: 0 0 100% 0;
+            }
+        </style>
+    </head>
+    <body class="font-nunito text-slate-900 antialiased">
+        <!-- Navigation -->
+        <nav
+            class="fixed top-0 left-0 right-0 z-50 bg-moss-50/80 backdrop-blur-md border-b border-moss-200"
+        >
+            <div class="max-w-6xl mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <a href="#" class="flex items-center gap-3">
+                        <img
+                            src="images/app-logo.png"
+                            alt="Glimpse"
+                            class="w-10 h-10 rounded-xl"
+                        />
+                        <span class="text-xl font-bold text-sage-900"
+                            >Glimpse</span
+                        >
+                    </a>
+                    <div class="hidden md:flex items-center gap-8">
+                        <a
+                            href="#features"
+                            class="text-sage-700 hover:text-sage-900 font-medium transition-colors"
+                            >Features</a
+                        >
+                        <a
+                            href="#screenshots"
+                            class="text-sage-700 hover:text-sage-900 font-medium transition-colors"
+                            >Screenshots</a
+                        >
+                        <a
+                            href="#premium"
+                            class="text-sage-700 hover:text-sage-900 font-medium transition-colors"
+                            >Premium</a
+                        >
+                        <a
+                            href="#"
+                            class="bg-sage-900 text-white px-5 py-2.5 rounded-full font-semibold hover:bg-sage-950 transition-colors"
+                            >Download</a
+                        >
+                    </div>
+                    <!-- Mobile menu button -->
+                    <button
+                        class="md:hidden p-2"
+                        onclick="
+                            document
+                                .getElementById('mobile-menu')
+                                .classList.toggle('hidden')
+                        "
+                    >
+                        <svg
+                            class="w-6 h-6 text-sage-900"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"
+                            ></path>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Mobile menu -->
+                <div id="mobile-menu" class="hidden md:hidden pt-4 pb-2">
+                    <div class="flex flex-col gap-4">
+                        <a
+                            href="#features"
+                            class="text-sage-700 hover:text-sage-900 font-medium"
+                            >Features</a
+                        >
+                        <a
+                            href="#screenshots"
+                            class="text-sage-700 hover:text-sage-900 font-medium"
+                            >Screenshots</a
+                        >
+                        <a
+                            href="#premium"
+                            class="text-sage-700 hover:text-sage-900 font-medium"
+                            >Premium</a
+                        >
+                        <a
+                            href="#"
+                            class="bg-sage-900 text-white px-5 py-2.5 rounded-full font-semibold text-center"
+                            >Download</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section
+            class="star-bg min-h-screen pt-32 pb-20 relative overflow-hidden"
+        >
+            <!-- Decorative corners -->
+            <div
+                class="absolute bottom-0 left-0 w-32 h-48 md:w-48 md:h-64 bg-gradient-to-tr from-sage-900 to-sage-700 rounded-tr-full"
+            ></div>
+            <div
+                class="absolute bottom-0 right-0 w-32 h-48 md:w-48 md:h-64 bg-gradient-to-tl from-sage-900 to-sage-700 rounded-tl-full"
+            ></div>
+
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h1
+                        class="text-4xl md:text-6xl font-bold text-sage-900 mb-6 leading-tight"
+                    >
+                        Capture your day<br />in seconds
+                    </h1>
+                    <p
+                        class="text-xl md:text-2xl text-sage-700 mb-8 font-medium"
+                    >
+                        A calming micro-journal that makes daily reflection
+                        effortless. Write in 140 characters or less, build
+                        streaks, and watch your memories grow.
+                    </p>
+                    <div
+                        class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+                    >
+                        <a href="#" class="app-store-btn inline-block">
+                            <img
+                                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                                alt="Download on the App Store"
+                                class="h-14"
+                            />
+                        </a>
+                        <span class="text-sage-600 font-medium"
+                            >Free to download</span
+                        >
+                    </div>
+                </div>
+
+                <!-- Hero Screenshots - Fanned Display -->
+                <div class="hero-phones">
+                    <img
+                        src="images/screenshot-2.jpeg"
+                        alt="Glimpse Insights"
+                        class="hero-phone hero-phone-left rounded-3xl"
+                    />
+                    <img
+                        src="images/screenshot-1.jpeg"
+                        alt="Glimpse Home Screen"
+                        class="hero-phone hero-phone-center rounded-3xl"
+                    />
+                    <img
+                        src="images/screenshot-4.jpeg"
+                        alt="Glimpse Entry"
+                        class="hero-phone hero-phone-right rounded-3xl"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-24 bg-white">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2
+                        class="text-3xl md:text-4xl font-bold text-sage-900 mb-4"
+                    >
+                        Simple by design
+                    </h2>
+                    <p class="text-lg text-sage-600 max-w-2xl mx-auto">
+                        Everything you need to build a journaling habit, nothing
+                        you don't.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="feature-card bg-moss-50 rounded-2xl p-8">
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-6"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-sage-900 mb-3">
+                            Daily Micro-Entries
+                        </h3>
+                        <p class="text-sage-600">
+                            Capture your day in 140 characters or less. Quick,
+                            focused, and meaningful reflections.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="feature-card bg-moss-50 rounded-2xl p-8">
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-6"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-sage-900 mb-3">
+                            Streak Tracking
+                        </h3>
+                        <p class="text-sage-600">
+                            Build consistency with visual streak tracking. Watch
+                            your journaling habit grow day by day.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="feature-card bg-moss-50 rounded-2xl p-8">
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-6"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-sage-900 mb-3">
+                            Privacy First
+                        </h3>
+                        <p class="text-sage-600">
+                            Your data stays on your device. Never uploaded to
+                            servers. Lock with PIN for extra security.
+                        </p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="feature-card bg-moss-50 rounded-2xl p-8">
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-6"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-sage-900 mb-3">
+                            Light & Dark Mode
+                        </h3>
+                        <p class="text-sage-600">
+                            Beautiful themes that adapt to your preference. Easy
+                            on the eyes, day or night.
+                        </p>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="feature-card bg-moss-50 rounded-2xl p-8">
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-6"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-sage-900 mb-3">
+                            Daily Reminders
+                        </h3>
+                        <p class="text-sage-600">
+                            Gentle nudges to help you remember to reflect. Set
+                            your perfect journaling time.
+                        </p>
+                    </div>
+
+                    <!-- Feature 6 - CTA -->
+                    <div
+                        class="feature-card bg-gradient-to-br from-sage-700 to-sage-900 rounded-2xl p-8 text-white"
+                    >
+                        <div
+                            class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mb-6"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M17.6 10.8L16.2 9.4l-4.2 4.2-4.2-4.2-1.4 1.4 5.6 5.6z"
+                                />
+                                <path
+                                    d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Start Today</h3>
+                        <p class="text-sage-200 mb-6">
+                            Download Glimpse and begin your journaling journey.
+                            It only takes a moment.
+                        </p>
+                        <a
+                            href="#"
+                            class="inline-flex items-center gap-2 bg-white text-sage-900 px-5 py-2.5 rounded-full font-semibold hover:bg-moss-100 transition-colors"
+                        >
+                            Get the App
+                            <svg
+                                class="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section id="screenshots" class="py-24 star-bg-light">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2
+                        class="text-3xl md:text-4xl font-bold text-sage-900 mb-4"
+                    >
+                        See Glimpse in action
+                    </h2>
+                    <p class="text-lg text-sage-600 max-w-2xl mx-auto">
+                        A beautifully crafted experience designed to make
+                        journaling a joy.
+                    </p>
+                </div>
+
+                <div
+                    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8"
+                >
+                    <div class="flex justify-center">
+                        <img
+                            src="images/screenshot-1.jpeg"
+                            alt="Home Screen"
+                            class="screenshot w-full max-w-[200px] rounded-2xl"
+                        />
+                    </div>
+                    <div class="flex justify-center">
+                        <img
+                            src="images/screenshot-2.jpeg"
+                            alt="Insights"
+                            class="screenshot w-full max-w-[200px] rounded-2xl"
+                        />
+                    </div>
+                    <div class="flex justify-center">
+                        <img
+                            src="images/screenshot-3.jpeg"
+                            alt="Light and Dark Mode"
+                            class="screenshot w-full max-w-[200px] rounded-2xl"
+                        />
+                    </div>
+                    <div class="flex justify-center">
+                        <img
+                            src="images/screenshot-4.jpeg"
+                            alt="Write Entry"
+                            class="screenshot w-full max-w-[200px] rounded-2xl"
+                        />
+                    </div>
+                    <div class="flex justify-center">
+                        <img
+                            src="images/screenshot-5.jpeg"
+                            alt="Export to PDF"
+                            class="screenshot w-full max-w-[200px] rounded-2xl"
+                        />
+                    </div>
+                    <div class="flex justify-center">
+                        <img
+                            src="images/screenshot-6.jpeg"
+                            alt="Privacy Lock"
+                            class="screenshot w-full max-w-[200px] rounded-2xl"
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Premium Section -->
+        <section id="premium" class="py-24 star-bg-light">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="text-center mb-12">
+                    <span
+                        class="inline-block bg-sage-600 text-white px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
+                        >Glimpse Premium</span
+                    >
+                    <h2
+                        class="text-3xl md:text-4xl font-bold text-sage-900 mb-4"
+                    >
+                        Unlock the full experience
+                    </h2>
+                    <p class="text-lg text-sage-600 max-w-2xl mx-auto">
+                        Take your journaling to the next level with powerful
+                        features designed for deeper reflection.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <!-- Premium Feature 1 -->
+                    <div
+                        class="feature-card bg-white rounded-2xl p-6 border border-moss-200"
+                    >
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-4"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-sage-900 mb-2">
+                            Multiple Entries
+                        </h3>
+                        <p class="text-sage-600 text-sm">
+                            Post as many times as you want each day. Capture
+                            every moment.
+                        </p>
+                    </div>
+
+                    <!-- Premium Feature 2 -->
+                    <div
+                        class="feature-card bg-white rounded-2xl p-6 border border-moss-200"
+                    >
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-4"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-sage-900 mb-2">
+                            Mood Tracking
+                        </h3>
+                        <p class="text-sage-600 text-sm">
+                            Track how you feel and discover patterns in your
+                            emotional journey.
+                        </p>
+                    </div>
+
+                    <!-- Premium Feature 3 -->
+                    <div
+                        class="feature-card bg-white rounded-2xl p-6 border border-moss-200"
+                    >
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-4"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-sage-900 mb-2">
+                            Images in Posts
+                        </h3>
+                        <p class="text-sage-600 text-sm">
+                            Add photos to your entries and bring your memories
+                            to life.
+                        </p>
+                    </div>
+
+                    <!-- Premium Feature 4 -->
+                    <div
+                        class="feature-card bg-white rounded-2xl p-6 border border-moss-200"
+                    >
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-4"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-sage-900 mb-2">
+                            Insights
+                        </h3>
+                        <p class="text-sage-600 text-sm">
+                            Dive deep into your journaling stats and see your
+                            growth over time.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Export feature highlight -->
+                <div
+                    class="feature-card bg-white rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8 border border-moss-200"
+                >
+                    <div class="flex-1">
+                        <div
+                            class="w-14 h-14 bg-sage-600 rounded-2xl flex items-center justify-center mb-4"
+                        >
+                            <svg
+                                class="w-7 h-7 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-sage-900 mb-3">
+                            Export to PDF
+                        </h3>
+                        <p class="text-sage-600">
+                            Create beautiful PDF exports of your journal
+                            entries. Perfect for printing, sharing, or keeping a
+                            backup of your memories outside the app.
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <img
+                            src="images/screenshot-5.jpeg"
+                            alt="PDF Export"
+                            class="w-48 rounded-2xl shadow-xl"
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="py-24 star-bg relative overflow-hidden">
+            <!-- Decorative corners -->
+            <div
+                class="absolute bottom-0 left-0 w-32 h-48 md:w-48 md:h-64 bg-gradient-to-tr from-sage-900 to-sage-700 rounded-tr-full"
+            ></div>
+            <div
+                class="absolute bottom-0 right-0 w-32 h-48 md:w-48 md:h-64 bg-gradient-to-tl from-sage-900 to-sage-700 rounded-tl-full"
+            ></div>
+
+            <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
+                <img
+                    src="images/app-logo.png"
+                    alt="Glimpse"
+                    class="w-24 h-24 rounded-3xl mx-auto mb-8 shadow-xl"
+                />
+                <h2 class="text-3xl md:text-4xl font-bold text-sage-900 mb-4">
+                    Start capturing moments today
+                </h2>
+                <p class="text-lg text-sage-600 mb-8">
+                    Join thousands of people building a daily reflection habit
+                    with Glimpse. Download free on the App Store.
+                </p>
+                <a href="#" class="app-store-btn inline-block">
+                    <img
+                        src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                        alt="Download on the App Store"
+                        class="h-16"
+                    />
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-sage-950 text-white py-12">
+            <div class="max-w-6xl mx-auto px-6">
+                <div
+                    class="flex flex-col md:flex-row justify-between items-center gap-8"
+                >
+                    <div class="flex items-center gap-3">
+                        <img
+                            src="images/app-logo.png"
+                            alt="Glimpse"
+                            class="w-10 h-10 rounded-xl"
+                        />
+                        <span class="text-xl font-bold">Glimpse</span>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-8">
+                        <a
+                            href="privacy.html"
+                            class="text-sage-400 hover:text-white transition-colors"
+                            >Privacy Policy</a
+                        >
+                        <a
+                            href="mailto:contact@evaske.com"
+                            class="text-sage-400 hover:text-white transition-colors"
+                            >Contact</a
+                        >
+                    </div>
+
+                    <div class="text-sage-500 text-sm">
+                        &copy; 2025 Glimpse. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
