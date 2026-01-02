@@ -104,7 +104,7 @@
             /* Hero phone display */
             .hero-phones {
                 position: relative;
-                height: 500px;
+                height: 460px;
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
@@ -112,7 +112,7 @@
 
             @media (min-width: 768px) {
                 .hero-phones {
-                    height: 580px;
+                    height: 520px;
                 }
             }
 
@@ -289,18 +289,28 @@
 
         <!-- Hero Section -->
         <section
-            class="star-bg min-h-screen pt-32 pb-20 relative overflow-hidden"
+            class="star-bg h-screen pt-32 pb-0 relative overflow-hidden flex flex-col"
         >
-            <!-- Decorative corners -->
-            <div
-                class="absolute bottom-0 left-0 w-32 h-48 md:w-48 md:h-64 bg-gradient-to-tr from-sage-900 to-sage-700 rounded-tr-full"
-            ></div>
-            <div
-                class="absolute bottom-0 right-0 w-32 h-48 md:w-48 md:h-64 bg-gradient-to-tl from-sage-900 to-sage-700 rounded-tl-full"
-            ></div>
+            <!-- Decorative wave at bottom -->
+            <div class="absolute bottom-0 left-0 right-0">
+                <svg
+                    viewBox="0 0 1440 120"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-full"
+                    preserveAspectRatio="none"
+                >
+                    <path
+                        d="M0 120L0 80C240 20 480 0 720 20C960 40 1200 80 1440 60L1440 120L0 120Z"
+                        fill="#2F443C"
+                    />
+                </svg>
+            </div>
 
-            <div class="max-w-6xl mx-auto px-6">
-                <div class="text-center max-w-3xl mx-auto mb-16">
+            <div
+                class="max-w-6xl mx-auto px-6 flex-1 flex flex-col justify-center"
+            >
+                <div class="text-center max-w-3xl mx-auto mb-8 md:mb-12">
                     <h1
                         class="text-4xl md:text-6xl font-bold text-sage-900 mb-6 leading-tight"
                     >
@@ -330,7 +340,7 @@
                 </div>
 
                 <!-- Hero Screenshots - Fanned Display -->
-                <div class="hero-phones">
+                <div class="hero-phones flex-shrink-0 mb-16 md:mb-24">
                     <img
                         src="images/screenshot-2.jpeg"
                         alt="Glimpse Insights"
@@ -764,13 +774,21 @@
 
         <!-- Final CTA Section -->
         <section class="py-24 star-bg relative overflow-hidden">
-            <!-- Decorative corners -->
-            <div
-                class="absolute bottom-0 left-0 w-32 h-48 md:w-48 md:h-64 bg-gradient-to-tr from-sage-900 to-sage-700 rounded-tr-full"
-            ></div>
-            <div
-                class="absolute bottom-0 right-0 w-32 h-48 md:w-48 md:h-64 bg-gradient-to-tl from-sage-900 to-sage-700 rounded-tl-full"
-            ></div>
+            <!-- Decorative wave at bottom -->
+            <div class="absolute bottom-0 left-0 right-0">
+                <svg
+                    viewBox="0 0 1440 120"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-full"
+                    preserveAspectRatio="none"
+                >
+                    <path
+                        d="M0 120L0 60C240 100 480 120 720 100C960 80 1200 40 1440 80L1440 120L0 120Z"
+                        fill="#2B312B"
+                    />
+                </svg>
+            </div>
 
             <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
                 <img
@@ -824,7 +842,7 @@
                     </div>
 
                     <div class="text-sage-500 text-sm">
-                        &copy; 2025 Glimpse. All rights reserved.
+                        &copy; 2025 Evaske Limited. All rights reserved.
                     </div>
                 </div>
             </div>
